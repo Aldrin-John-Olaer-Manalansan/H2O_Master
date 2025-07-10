@@ -1,0 +1,32 @@
+Open-Source AJOM License
+
+Maintainers:
+    Aldrin John Olaer Manalansan (aldrinjohnolaermanalansan@gmail.com)
+
+Copyright Holders:
+    Copyright 2025 Aldrin John Olaer Manalansan (aldrinjohnolaermanalansan@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this program and associated documentation files (hereinafter "the Software"), to use, modify, and distribute it, subject to the following conditions:
+
+1. Attribution
+    a. Any individual is allowed to derive this work, but the derived work will be subject to the terms and conditions of this license.
+    b. individuals(alone or a group) responsible for the derivative work are specified as the new "Maintainer/s", and is/are added at the end of the "Copyright Holders".
+    d. The Software must retain a visible and accessible "Credits" section in all distributed copies and substantial portions (herinafter "the fragments") of the Software.
+    e. All existing informations specified in the Credits section of each fragment must always be retained.
+    f. Contributors who make reasonable modifications (such as optimizations, feature additions, significant bug fixes, or to satisfy the project's needs) for a specific fragment must have their names specified at the end of the "Contributors" list, found at the Credits section of that fragment.
+    g. Credit for a Copyright Holder is specified as: "Copyright <year> <name> (contactinfo1 contactinfo2 ...) <maintained program link>"
+    h. Credit for a Maintainer or a Contributor is specified as: "<name> (contactinfo1 contactinfo2 ...)"
+
+3. Permitted Use
+    The Software may only be used in one or both of the following:
+        a. Open source projects, where the program of the resulting project is publicly available under an OSI-approved license.
+        b. Non-commercial projects that do not restrict usage and aren't sold, monetized, or otherwise used for commercial gain. Sponsorships and Donation-based funding are permitted.
+
+4. Commercial Use and Exceptions
+    If any user wishes to use the Software in a project that is neither open source nor non-commercial as described above, they must:
+        a. Contact all the copyright holders to request permission.
+        b. Receive explicit, written permission from all the copyright holders.
+        c. Compensate all the copyright holders by purchasing a license to use the Software under mutually agreed-upon terms.
+
+5. Disclaimer of Warranty
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL ALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.

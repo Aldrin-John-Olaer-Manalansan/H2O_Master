@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(GDB + GCC) Debug Unit Test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/Back-End/UnitTest.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceRoot}/Back-End",
+      "environment": [],
+      "externalConsole": false,
+      "internalConsoleOptions": "neverOpen",  // Optional
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          },
+          {
+              "description": "Set Disassembly Flavor to Intel",
+              "text": "-gdb-set disassembly-flavor intel",
+              "ignoreFailures": true
+          }
+      ],
+      "preLaunchTask": "windows gcc build Unit Test"
+    },
+    {
+      "name": "(LLDB + Clang + ASan) Debug Unit Test",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceRoot}/Back-End/UnitTest.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ASAN_OPTIONS": "alloc_dealloc_mismatch=1:color=always:symbolize=1"
+      },
+      "sourceLanguages": ["c", "cpp"],
+      "terminal": "integrated",
+      "preLaunchTask": "C/C++: clang.exe sanitize build Unit Test"
+    }
+  ]
+}

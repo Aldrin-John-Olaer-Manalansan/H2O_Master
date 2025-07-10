@@ -1,0 +1,14 @@
+{
+	"files.associations": {
+		"ctype.h": "c",
+		"stdint.h": "c",
+		"dynamicstringarray.h": "c",
+		"blast.h": "c",
+		"string.h": "c",
+		"stdlib.h": "c",
+		"crc.h": "c",
+		"setjmp.h": "c",
+		"cstdint": "c",
+		"stdio.h": "c"
+	}
+}
