@@ -58,17 +58,21 @@ int main (void) {
 	// Extract(u"C:/Users/Admin/OneDrive/Archive/Personal/Current/Data/Scripts/Battle_Realms/H2O_Master/Back-End/test", targetsStatus, targetIndexes, 7);
 
 	printf("start\n");
-	t_api_info apiInfo = Load("B:/Programs/BR and WOTW(Latest Patch)/Interface/Interface2.H2O");
+	// t_api_info apiInfo = Load("B:/Programs/BR and WOTW(Latest Patch)/Interface/Interface2.H2O");
+	t_api_info apiInfo = Load("B:/Programs/Battle Realms - Zen Edition/Interface/Interface_Text.H2O");
 	printf("Version: %u\n", apiInfo.version);
 	printf("File Count: %u\n", apiInfo.entryCount);
 	printf("Compressed Size: %llu\n", apiInfo.compressedSize);
 	printf("Raw Size: %llu\n", apiInfo.rawSize);
 
+	uint32_t index = 0;
 	for (const t_api_entry* apiEntry = apiInfo.entries; apiEntry < apiInfo.entries + apiInfo.entryCount; apiEntry++) {
+		printf("%u: hasHeader=%hhu compressedSize=%u rawSize=%u offset=%X checksum=%X filePath=", index, apiEntry->hasHeader, apiEntry->compressedSize, apiEntry->rawSize, apiEntry->offset, apiEntry->checksum);
 		if (apiEntry->directoryNode) {
 			printf("%ls\\", apiEntry->directoryNode->name);
 		}
 		printf("%ls\n", apiEntry->name);
+		index++;
 	}
 
 	bool targetsStatus[7] = {false};

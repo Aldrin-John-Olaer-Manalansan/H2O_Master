@@ -126,3 +126,45 @@ int wmkdirs(const wchar_t* const path) {
 
     return 0;
 }
+
+// Reads the entire contents of a binary file, then stores it to a manageable binary buffer
+// static bool ReadFile(const char* restrict const fromFilePath, void *restrict *restrict const buffer, size_t* restrict const bufferSize) {
+// 	FILE* file;
+// 	size_t fileSize;
+
+// 	file = fopen(fromFilePath, "rb");
+// 	if (!file) {
+// 		return false; // failed to open file
+// 	}
+
+// 	fseeko(file, 0, SEEK_END); // move pointer to EOF
+// 	fileSize = (size_t)ftello(file);
+// 	if (fileSize != SIZE_MAX) {
+// 		size_t requiredSize = fileSize + 1; // +1 for null terminator string compatibility
+// 		if (requiredSize > *bufferSize) {
+// 			char* expandedBuffer = malloc(requiredSize);
+// 			if (!expandedBuffer) {
+// 				fclose(file);
+// 				return false; // failed expanding memory
+// 			}
+// 			if (*buffer) {
+// 				free(*buffer); // free the old buffer if it exists
+// 			}
+// 			*buffer = expandedBuffer;
+// 			*bufferSize = requiredSize;
+// 		}
+// 		if (*buffer) {
+// 			rewind(file); // move pointer to SOF
+// 			// Read file into buffer
+// 			if (fileSize == fread(*buffer, 1, fileSize, file)) {
+// 				fclose(file);
+
+// 				((char*)*buffer)[fileSize] = 0; // null terminator at the end for string compatibility
+// 				return true; // successfully read the file
+// 			}
+// 		}
+// 	}
+
+// 	fclose(file);
+// 	return false; // Something went wrong
+// }

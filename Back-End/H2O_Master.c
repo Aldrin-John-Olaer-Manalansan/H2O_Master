@@ -51,48 +51,6 @@ static void __attribute__((constructor)) RuntimeInit(void) {
 	StringData_Init(&g_inspectedFilePath);
 }
 
-// Reads the entire contents of a binary file, then stores it to a manageable binary buffer
-// static bool ReadFile(const char* restrict const fromFilePath, void *restrict *restrict const buffer, size_t* restrict const bufferSize) {
-// 	FILE* file;
-// 	size_t fileSize;
-
-// 	file = fopen(fromFilePath, "rb");
-// 	if (!file) {
-// 		return false; // failed to open file
-// 	}
-
-// 	fseeko(file, 0, SEEK_END); // move pointer to EOF
-// 	fileSize = (size_t)ftello(file);
-// 	if (fileSize != SIZE_MAX) {
-// 		size_t requiredSize = fileSize + 1; // +1 for null terminator string compatibility
-// 		if (requiredSize > *bufferSize) {
-// 			char* expandedBuffer = malloc(requiredSize);
-// 			if (!expandedBuffer) {
-// 				fclose(file);
-// 				return false; // failed expanding memory
-// 			}
-// 			if (*buffer) {
-// 				free(*buffer); // free the old buffer if it exists
-// 			}
-// 			*buffer = expandedBuffer;
-// 			*bufferSize = requiredSize;
-// 		}
-// 		if (*buffer) {
-// 			rewind(file); // move pointer to SOF
-// 			// Read file into buffer
-// 			if (fileSize == fread(*buffer, 1, fileSize, file)) {
-// 				fclose(file);
-
-// 				((char*)*buffer)[fileSize] = 0; // null terminator at the end for string compatibility
-// 				return true; // successfully read the file
-// 			}
-// 		}
-// 	}
-
-// 	fclose(file);
-// 	return false; // Something went wrong
-// }
-
 /* retrieves the chunk data of the chunk found at the the current seek pointer of the inspected file object
  * out_decompressedSize can be set to NULL, otherwise specify a pointer where the size of the decompressed data will be written
  * out_decompressedStorage will be used to store the decompressed data
@@ -349,11 +307,12 @@ void Extract(const char16_t* restrict const workingDirectory, bool* restrict tar
 				continue; // failed to retrieve data from;
 			}
 		} else {
-			BinaryData_SetMinSize(&g_DecompressedBinary, apiEntry->rawSize);
+			decompressedSize = apiEntry->rawSize; // set the decompressed size
+			BinaryData_SetMinSize(&g_DecompressedBinary, decompressedSize);
 			decompressedData = g_DecompressedBinary.data;
-			if (apiEntry->compressedSize == apiEntry->rawSize) { // not compressed
+			if (apiEntry->compressedSize == decompressedSize) { // not compressed
 				// read the raw data directly
-				if (fread(decompressedData, apiEntry->rawSize, 1, inspectedFileObject) != 1) {
+				if (fread(decompressedData, decompressedSize, 1, inspectedFileObject) != 1) {
 					continue; // failed to read the data, skip this entry
 				}
 			} else {
@@ -361,13 +320,12 @@ void Extract(const char16_t* restrict const workingDirectory, bool* restrict tar
 				void* const compressedData = g_SharedBuffer.data;
 				if ((fread(compressedData, apiEntry->compressedSize, 1, inspectedFileObject) != 1) // failed to read the compressed data
 				|| !DecompressData( // failed to decompress data
-					decompressedData, apiEntry->rawSize,
+					decompressedData, decompressedSize,
 					compressedData, apiEntry->compressedSize,
 					apiEntry->checksum)
 				) {
 					continue; // failed to read the compressed data, skip this entry
 				}
-				decompressedSize = apiEntry->rawSize; // set the decompressed size
 			}
 		}
 
