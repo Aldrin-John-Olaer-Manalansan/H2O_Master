@@ -13,7 +13,7 @@
  * <https://raw.githubusercontent.com/Aldrin-John-Olaer-Manalansan/AJOM_License/refs/heads/main/LICENSE_AJOM-OS>
  * 
  * Credits:
- * 	Battle Realms Community for their shared informations through reverse engineering of C&C games
+ * 	Battle Realms Community for their shared informations through reverse engineering
  */
 
 #pragma once
@@ -36,11 +36,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-
-enum {
-	FILETYPE_RAW,
-	FILETYPE_COMPRESSED
-};
+#include <uchar.h>
 
 typedef struct {
 	uint32_t version;			// Version.
@@ -52,16 +48,16 @@ typedef struct {
 } t_header;
 
 typedef struct {
-	uint32_t type;				// Entry type. (Raw = 0), (Compressed = 1)
-	uint32_t directoryIndex;	// element index at directory array. -1 if no directory.
+	uint32_t hasChunkHeader;	// Entry type. (Raw = 0), (Compressed = 1)
+	uint32_t directoryNodeIndex;	// element index at directory array. -1 if no directory.
 	uint32_t nameIndex;			// element index at name array. -1 if entry has no name(therefore unused).
-	uint32_t compressedSize;	// Compressed size of file.
 	uint32_t rawSize;			// Raw size of file.
-	uint32_t unknown1;			// Unknown.
+	uint32_t compressedSize;	// Compressed size of file.
+	uint32_t unknown1;			// Unknown(always 0x7CFC1200).
 	uint32_t offset;			// Offset
-	uint32_t unknown2;			// Unknown.
+	uint32_t unknown2;			// Unknown(always 0).
 	uint32_t checksum;			// Checksum. Computed with crc32
-	uint32_t unknown3;			// Unknown.
+	uint32_t unknown3;			// Unknown(always 0x90189200).
 } t_entry;
 
 typedef struct {
@@ -76,19 +72,26 @@ typedef struct {
 					// Array of strings
 } t_chunk_data;
 
+typedef struct _directory_t {
+	struct _directory_t* parent;
+	const char16_t* name;
+} t_directorynode;
+
+typedef struct {
+	const t_directorynode* directoryNode;
+	const char16_t* name;
+	uint32_t offset;
+	uint32_t compressedSize;
+	uint32_t rawSize;
+	uint32_t checksum;
+	bool hasHeader; // 0 if the binary at the offset is the actual data, 1 if it has t_chunk_header before the actual data
+} t_api_entry;
+
 typedef struct {
 	uint64_t compressedSize;
 	uint64_t rawSize;
+	t_api_entry* entries;
+	uint32_t entryCount;
+	uint32_t maxEntryCount;
 	uint32_t version;
-	uint32_t fileCount;
 } t_api_info;
-
-typedef struct {
-	char* directory;
-	char* name;
-	uint32_t index;
-	uint32_t compressedSize;
-	uint32_t rawSize;
-	bool isCompressed;
-	bool hasChecksum;
-} t_api_entry;

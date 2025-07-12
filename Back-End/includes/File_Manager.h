@@ -1,8 +1,8 @@
 /*
- * @File: Compression_Manager.h
+ * @File: File_Manager.c
  * @Author: Aldrin John O. Manalansan (ajom)
  * @Email: aldrinjohnolaermanalansan@gmail.com
- * @Brief: Helper functions for compression and decompression of data
+ * @Brief: Helper functions for Reading and Writing files
  * @LastUpdate: June 7, 2025
  * 
  * Copyright (C) 2025  Aldrin John O. Manalansan  <aldrinjohnolaermanalansan@gmail.com>
@@ -20,5 +20,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <uchar.h>
 
-bool DecompressData(void* const destination, const uint32_t destinationSize, const void* const source, const uint32_t sourceSize, const uint32_t expectedChecksum);
+bool save_binary_utf16le_path(const char16_t* const filePath, const void* const data, const size_t dataSize);
+int wmkdirs(const wchar_t* const path);

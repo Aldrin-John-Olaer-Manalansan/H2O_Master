@@ -1,8 +1,8 @@
 /*
- * @File: Compression_Manager.h
+ * @File: String16.c
  * @Author: Aldrin John O. Manalansan (ajom)
  * @Email: aldrinjohnolaermanalansan@gmail.com
- * @Brief: Helper functions for compression and decompression of data
+ * @Brief: Helper functions for Managing UTF-16LE strings
  * @LastUpdate: June 7, 2025
  * 
  * Copyright (C) 2025  Aldrin John O. Manalansan  <aldrinjohnolaermanalansan@gmail.com>
@@ -16,9 +16,15 @@
  * 	Battle Realms Community for their shared informations through reverse engineering
  */
 
-#pragma once
+#include "String16.h"
 
-#include <stdbool.h>
-#include <stdint.h>
-
-bool DecompressData(void* const destination, const uint32_t destinationSize, const void* const source, const uint32_t sourceSize, const uint32_t expectedChecksum);
+size_t str16len(const char16_t* str) {
+	size_t length = 0;
+	for (;;) {
+		if (*str == 0) {
+			return length; // null terminator found, return the length
+		}
+		length++;
+		str++;
+	}
+}

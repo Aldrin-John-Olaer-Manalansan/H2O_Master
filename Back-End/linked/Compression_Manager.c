@@ -13,7 +13,7 @@
  * <https://raw.githubusercontent.com/Aldrin-John-Olaer-Manalansan/AJOM_License/refs/heads/main/LICENSE_AJOM-OS>
  * 
  * Credits:
- * 	Battle Realms Community for their shared informations through reverse engineering of C&C games
+ * 	Battle Realms Community for their shared informations through reverse engineering
  */
 
 #include "Compression_Manager.h"
@@ -30,7 +30,6 @@ typedef struct {
 	uint8_t *decompressedData;
 	uint32_t compressedSize;
 	uint32_t decompressedSize;
-	uint32_t decompressedChecksum;
 } t_blast_tracker;
 
 // one shot callback
@@ -40,24 +39,25 @@ static unsigned DecompressorCallback_Input(void* how, unsigned char** buf) {
 	return blastInfo->compressedSize;
 }
 
-// one shot callback
+// this callback is triggered multiple times everytime a piece of the compressed data has been digested
 static int DecompressorCallback_Output(void* how, unsigned char* buf, unsigned len) {
+	// copy this piece at the end of the output data
 	t_blast_tracker *blastInfo = (t_blast_tracker*)how;
-	memcpy(blastInfo->decompressedData, buf, (size_t)len);
-	blastInfo->decompressedSize = len;
-	blastInfo->decompressedChecksum = CRC32(buf, len);
-	return 0;
+	memcpy(blastInfo->decompressedData + blastInfo->decompressedSize, buf, (size_t)len);
+	blastInfo->decompressedSize += len;
+	return 0; // tell blast() to process next piece
 }
 
+// Decompresses the source data using PKWARE DCL then stores the result at destination
+// returns true if the decompression was successful, else returns false
 bool DecompressData(void* const destination, const uint32_t destinationSize, const void* const source, const uint32_t sourceSize, const uint32_t expectedChecksum) {
 	t_blast_tracker blastInfo = {
 		.compressedData = source,
 		.decompressedData = destination,
 		.compressedSize = sourceSize,
 		.decompressedSize = 0,
-		.decompressedChecksum = 0
 	};
-	return !blast(DecompressorCallback_Input, &blastInfo, DecompressorCallback_Output, &blastInfo, NULL, NULL)
+	return (!blast(DecompressorCallback_Input, &blastInfo, DecompressorCallback_Output, &blastInfo, NULL, NULL)
 	&& (blastInfo.decompressedSize == destinationSize)
-	&& (blastInfo.decompressedChecksum == expectedChecksum);
+	&& (CRC32(destination, destinationSize) == expectedChecksum));
 }
