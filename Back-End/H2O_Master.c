@@ -111,7 +111,7 @@ static void* GetChunkData(FILE* restrict const inspectedFileObject,
 // Loads an H2O Archive into memory for future use
 // returns all relevant informations about it
 // if the function returns with rawSize = 0, it means that the function failed to load the H2O archive
-t_api_info Load(const char* const filePath) {
+DLL_PUBLIC t_api_info Load(const char* const filePath) {
 	g_APIInfo.rawSize = 0;
 
 	FILE* inspectedFileObject = fopen(filePath, "rb");
@@ -163,8 +163,8 @@ t_api_info Load(const char* const filePath) {
 			return g_APIInfo; // something went wrong
 		}
 
-		apiEntry->directoryNode = NULL;
-		memcpy(&apiEntry->directoryNode, &entry.directoryNodeIndex, sizeof(entry.directoryNodeIndex)); // temporary storage, will be replaced later
+		apiEntry->directory = NULL;
+		memcpy(&apiEntry->directory, &entry.directoryNodeIndex, sizeof(entry.directoryNodeIndex)); // temporary storage, will be replaced later
 		apiEntry->name = NULL;
 		memcpy(&apiEntry->name, &entry.nameIndex, sizeof(entry.nameIndex)); // temporary storage, will be replaced later
 
@@ -227,8 +227,8 @@ t_api_info Load(const char* const filePath) {
 
 		// map the directoryNodes to the entries
 		for (t_api_entry* apiEntry = g_APIInfo.entries; apiEntry < g_APIInfo.entries + header_Archive.fileCount; apiEntry++) {
-			memcpy(&index, &apiEntry->directoryNode, sizeof(index)); // recover the directoryNode index from the temporary storage
-			apiEntry->directoryNode = (index < directoryNodeCount) ? (t_directorynode*)g_Directories.data + index : NULL;
+			memcpy(&index, &apiEntry->directory, sizeof(index)); // recover the directoryNode index from the temporary storage
+			apiEntry->directory = (index < directoryNodeCount) ? ((t_directorynode*)g_Directories.data)[index].name : NULL;
 		}
 	}
 
@@ -266,7 +266,12 @@ t_api_info Load(const char* const filePath) {
 	return g_APIInfo; // successfully loaded the H2O archive
 }
 
-void Extract(const char16_t* restrict const workingDirectory, bool* restrict targetsStatus, const uint32_t* restrict targetIndexes, uint32_t indexCount) {
+// Extracts the file linked on each index found at the in_targetIndexes
+// The each element at out_targetsStatus will individually be set to true if their respective linked file was successfully extracted
+DLL_PUBLIC void Extract(
+	const char16_t* restrict const workingDirectory, uint32_t targetCount,
+	const uint32_t* restrict in_targetIndexes, bool* restrict out_targetsStatus
+) {
 	if (!g_APIInfo.entryCount) {
 		return; // no entries to extract
 	}
@@ -285,8 +290,8 @@ void Extract(const char16_t* restrict const workingDirectory, bool* restrict tar
 	}
 	_wchdir(workingDirectory); // change current working directory(cwd)
 
-	while (indexCount--) {
-		const uint32_t index = *targetIndexes++;
+	while (targetCount--) {
+		const uint32_t index = *in_targetIndexes++;
 		if (index >= g_APIInfo.entryCount) {
 			continue; // index out of bounds, skip this entry
 		}
@@ -330,10 +335,10 @@ void Extract(const char16_t* restrict const workingDirectory, bool* restrict tar
 		}
 
 		BinaryBuilder_Clear(&g_SharedBinaryBuilder);
-		if (apiEntry->directoryNode && apiEntry->directoryNode->name) {
+		if (apiEntry->directory) {
 			// append directory of this file
 			BinaryBuilder_InsertBytes(&g_SharedBinaryBuilder, ".\x00\\", 4);
-			BinaryBuilder_InsertBytes(&g_SharedBinaryBuilder, apiEntry->directoryNode->name, (str16len(apiEntry->directoryNode->name) + 1) * sizeof(char16_t));
+			BinaryBuilder_InsertBytes(&g_SharedBinaryBuilder, apiEntry->directory, (str16len(apiEntry->directory) + 1) * sizeof(char16_t));
 			if (_waccess(g_SharedBinaryBuilder.data, 0)) { // directory does not exist
 				wmkdirs(g_SharedBinaryBuilder.data); // create the directory
 			}
@@ -343,7 +348,7 @@ void Extract(const char16_t* restrict const workingDirectory, bool* restrict tar
 		// append filefullname of this file
 		BinaryBuilder_InsertBytes(&g_SharedBinaryBuilder, apiEntry->name, (str16len(apiEntry->name) + 1) * sizeof(char16_t));
 		if (save_binary_utf16le_path(g_SharedBinaryBuilder.data, decompressedData, decompressedSize)) {
-			*targetsStatus++ = true; // mark this entry as extracted
+			*out_targetsStatus++ = true; // mark this entry as extracted
 		}
 	}
 

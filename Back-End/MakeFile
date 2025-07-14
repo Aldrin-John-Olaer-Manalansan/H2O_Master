@@ -1,0 +1,130 @@
+# FileName Definitions
+DEPLOYMENT_SOURCENAME := H2O_Master
+UNITTEST_SOURCENAME := UnitTest
+
+# Directory definitions
+MAKEFILE_DIRECTORY := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+BUILD_DIR_x86 := $(MAKEFILE_DIRECTORY)/build/x86
+BUILD_DIR_x64 := $(MAKEFILE_DIRECTORY)/build/x64
+OBJ_DIR_x86 := $(BUILD_DIR_x86)/objects
+OBJ_DIR_x64 := $(BUILD_DIR_x64)/objects
+
+# Compiler paths for different architectures
+GCC_x86 := i686-w64-mingw32-gcc
+GCC_x64 := x86_64-w64-mingw32-gcc
+
+# Build flags
+C_FLAGS_BASE := -std=gnu2x -pedantic -Wall -Wextra -O3 -pipe -flto
+C_FLAGS_UNITTEST := $(C_FLAGS_BASE) -ggdb3 -fdiagnostics-color=always
+C_FLAGS_DEPLOYMENT := $(C_FLAGS_BASE) -DBUILD_DLL -fvisibility=hidden -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables -Wl,--strip-all -shared -fPIC
+
+# Include paths
+INCLUDE_HEADER_SEARCH_DIRECTORIES := \
+-I$(MAKEFILE_DIRECTORY) \
+-I$(MAKEFILE_DIRECTORY)/includes \
+-I$(USERPROFILE)/Documents/C/OneDrive
+
+# C source files
+LINKED_SRC := \
+$(wildcard $(MAKEFILE_DIRECTORY)/linked/*.c) \
+$(USERPROFILE)/Documents/C/OneDrive/Cryptography/CRC.c \
+$(USERPROFILE)/Documents/C/OneDrive/DynamicDataStructures/BinaryBuilder.c \
+$(USERPROFILE)/Documents/C/OneDrive/DynamicDataStructures/StringBuilder.c
+
+# Main source files
+DEPLOYMENT_SRC := $(MAKEFILE_DIRECTORY)/$(DEPLOYMENT_SOURCENAME).c
+UNITTEST_SRC := $(MAKEFILE_DIRECTORY)/$(UNITTEST_SOURCENAME).c
+
+# Generate object file lists
+DEPLOYMENT_OBJS_x86 := $(patsubst %.c,$(OBJ_DIR_x86)/%.o,$(notdir $(LINKED_SRC) $(DEPLOYMENT_SRC)))
+DEPLOYMENT_OBJS_x64 := $(patsubst %.c,$(OBJ_DIR_x64)/%.o,$(notdir $(LINKED_SRC) $(DEPLOYMENT_SRC)))
+
+UNITTEST_OBJS_x86 := $(patsubst %.c,$(OBJ_DIR_x86)/unittest_%.o,$(notdir $(LINKED_SRC) $(UNITTEST_SRC)))
+UNITTEST_OBJS_x64 := $(patsubst %.c,$(OBJ_DIR_x64)/unittest_%.o,$(notdir $(LINKED_SRC) $(UNITTEST_SRC)))
+
+# Default target - deployment build
+.PHONY: all deployment test clean clean-x86 clean-x64
+
+all: deployment
+
+deployment: $(BUILD_DIR_x86)/$(DEPLOYMENT_SOURCENAME)_Library.dll $(BUILD_DIR_x64)/$(DEPLOYMENT_SOURCENAME)_Library.dll
+
+test: $(BUILD_DIR_x86)/$(UNITTEST_SOURCENAME).exe $(BUILD_DIR_x64)/$(UNITTEST_SOURCENAME).exe
+
+# Create directories
+$(OBJ_DIR_x86) $(OBJ_DIR_x64) $(BUILD_DIR_x86) $(BUILD_DIR_x64):
+	@if not exist "$(subst /,\,$@)" mkdir "$(subst /,\,$@)"
+
+# x86 Deployment DLL
+$(BUILD_DIR_x86)/$(DEPLOYMENT_SOURCENAME)_Library.dll: $(DEPLOYMENT_OBJS_x86) | $(BUILD_DIR_x86)
+	$(GCC_x86) $(C_FLAGS_DEPLOYMENT) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -o $@ $^
+
+# x64 Deployment DLL
+$(BUILD_DIR_x64)/$(DEPLOYMENT_SOURCENAME)_Library.dll: $(DEPLOYMENT_OBJS_x64) | $(BUILD_DIR_x64)
+	$(GCC_x64) $(C_FLAGS_DEPLOYMENT) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -o $@ $^
+
+# x86 Unit Test Executable
+$(BUILD_DIR_x86)/$(UNITTEST_SOURCENAME).exe: $(UNITTEST_OBJS_x86) | $(BUILD_DIR_x86)
+	$(GCC_x86) $(C_FLAGS_UNITTEST) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -o $@ $^
+
+# x64 Unit Test Executable
+$(BUILD_DIR_x64)/$(UNITTEST_SOURCENAME).exe: $(UNITTEST_OBJS_x64) | $(BUILD_DIR_x64)
+	$(GCC_x64) $(C_FLAGS_UNITTEST) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -o $@ $^
+
+# Deployment object file compilation rules for x86
+define DEPLOYMENT_OBJ_x86_template
+$(OBJ_DIR_x86)/$(notdir $(basename $(1))).o: $(1) | $(OBJ_DIR_x86)
+	$(GCC_x86) $(C_FLAGS_DEPLOYMENT) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -c "$(1)" -o "$$@"
+endef
+
+$(foreach src,$(LINKED_SRC) $(DEPLOYMENT_SRC),$(eval $(call DEPLOYMENT_OBJ_x86_template,$(src))))
+
+# Deployment object file compilation rules for x64
+define DEPLOYMENT_OBJ_x64_template
+$(OBJ_DIR_x64)/$(notdir $(basename $(1))).o: $(1) | $(OBJ_DIR_x64)
+	$(GCC_x64) $(C_FLAGS_DEPLOYMENT) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -c "$(1)" -o "$$@"
+endef
+
+$(foreach src,$(LINKED_SRC) $(DEPLOYMENT_SRC),$(eval $(call DEPLOYMENT_OBJ_x64_template,$(src))))
+
+# Unit test object file compilation rules for x86
+define UNITTEST_OBJ_x86_template
+$(OBJ_DIR_x86)/unittest_$(notdir $(basename $(1))).o: $(1) | $(OBJ_DIR_x86)
+	$(GCC_x86) $(C_FLAGS_UNITTEST) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -c "$(1)" -o "$$@"
+endef
+
+$(foreach src,$(LINKED_SRC) $(UNITTEST_SRC),$(eval $(call UNITTEST_OBJ_x86_template,$(src))))
+
+# Unit test object file compilation rules for x64
+define UNITTEST_OBJ_x64_template
+$(OBJ_DIR_x64)/unittest_$(notdir $(basename $(1))).o: $(1) | $(OBJ_DIR_x64)
+	$(GCC_x64) $(C_FLAGS_UNITTEST) $(INCLUDE_HEADER_SEARCH_DIRECTORIES) -c "$(1)" -o "$$@"
+endef
+
+$(foreach src,$(LINKED_SRC) $(UNITTEST_SRC),$(eval $(call UNITTEST_OBJ_x64_template,$(src))))
+
+# Clean targets
+clean: clean-x86 clean-x64
+
+clean-x86:
+	@if exist "$(subst /,\,$(BUILD_DIR_x86))" rmdir /s /q "$(subst /,\,$(BUILD_DIR_x86))"
+
+clean-x64:
+	@if exist "$(subst /,\,$(BUILD_DIR_x64))" rmdir /s /q "$(subst /,\,$(BUILD_DIR_x64))"
+
+# Help target
+help:
+	@echo "Available targets:"
+	@echo "  all        - Build deployment DLLs (default)"
+	@echo "  deployment - Build dll for both x86 and x64"
+	@echo "  test       - Build UnitTest for both x86 and x64"
+	@echo "  clean      - Clean all build artifacts"
+	@echo "  clean-x86  - Clean x86 build artifacts"
+	@echo "  clean-x64  - Clean x64 build artifacts"
+	@echo "  help       - Show this help message"
+
+# Dependency tracking - automatically handle header changes
+-include $(DEPLOYMENT_OBJS_x86:.o=.d)
+-include $(DEPLOYMENT_OBJS_x64:.o=.d)
+-include $(UNITTEST_OBJS_x86:.o=.d)
+-include $(UNITTEST_OBJS_x64:.o=.d)

@@ -34,6 +34,17 @@
 //   #warning "__STDC_VERSION__ not defined; likely C90"
 // #endif
 
+#ifndef BUILD_DLL
+	#define DLL_PUBLIC
+	#warning "Building UnitTest"
+#elif defined(_WIN32)
+	#define DLL_PUBLIC __declspec(dllexport)
+	#warning "Building DLL for Windows"
+#else
+	#define DLL_PUBLIC __attribute__((visibility("default")))
+	#warning "Building DLL for Linux"
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <uchar.h>
@@ -73,13 +84,13 @@ typedef struct {
 } t_chunk_data;
 
 typedef struct _directory_t {
-	struct _directory_t* parent;
-	const char16_t* name;
+	struct _directory_t* parent; // pointer to a single directory node struct
+	const char16_t* name; // pointer to the name of this directory node in UTF-16LE encoding(2-byte wide characters)
 } t_directorynode;
 
 typedef struct {
-	const t_directorynode* directoryNode;
-	const char16_t* name;
+	const char16_t* directory; // pointer to a single directory node struct
+	const char16_t* name; // pointer to the name of the file in UTF-16LE encoding(2-byte wide characters)
 	uint32_t offset;
 	uint32_t compressedSize;
 	uint32_t rawSize;
@@ -90,8 +101,8 @@ typedef struct {
 typedef struct {
 	uint64_t compressedSize;
 	uint64_t rawSize;
-	t_api_entry* entries;
-	uint32_t entryCount;
-	uint32_t maxEntryCount;
+	t_api_entry* entries; // pointer to array of entries
+	uint32_t entryCount; // number of elements in entries
+	uint32_t maxEntryCount; // max number of elements in entries(for memory size tracking purposes)
 	uint32_t version;
 } t_api_info;

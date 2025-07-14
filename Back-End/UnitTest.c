@@ -68,8 +68,8 @@ int main (void) {
 	uint32_t index = 0;
 	for (const t_api_entry* apiEntry = apiInfo.entries; apiEntry < apiInfo.entries + apiInfo.entryCount; apiEntry++) {
 		printf("%u: hasHeader=%hhu compressedSize=%u rawSize=%u offset=%X checksum=%X filePath=", index, apiEntry->hasHeader, apiEntry->compressedSize, apiEntry->rawSize, apiEntry->offset, apiEntry->checksum);
-		if (apiEntry->directoryNode) {
-			printf("%ls\\", apiEntry->directoryNode->name);
+		if (apiEntry->directory) {
+			printf("%ls\\", apiEntry->name);
 		}
 		printf("%ls\n", apiEntry->name);
 		index++;
@@ -77,6 +77,6 @@ int main (void) {
 
 	bool targetsStatus[7] = {false};
 	uint32_t targetIndexes[7] = {62, 0, 13, 15, 8, 9, 11};
-	Extract(u"C:\\Users\\Admin\\OneDrive\\Archive\\Personal\\Current\\Data\\Scripts\\Battle_Realms\\H2O_Master\\Back-End\\test", targetsStatus, targetIndexes, 7);
+	Extract(u"C:\\Users\\Admin\\OneDrive\\Archive\\Personal\\Current\\Data\\Scripts\\Battle_Realms\\H2O_Master\\Back-End\\test", 7, targetIndexes, targetsStatus);
 	return 0;
 }

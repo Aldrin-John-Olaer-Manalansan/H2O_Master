@@ -1,0 +1,103 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>H2O_Master</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+	<!-- Platforms list -->
+	<PropertyGroup>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<AssemblyName>H2O_Master</AssemblyName>
+		<Version>0.0.0</Version>
+		<Authors>Aldrin John O. Manalansan</Authors>
+		<Company>AJOM</Company>
+		<Product />
+		<Description>Manage H2O Archives with Ease</Description>
+		<Copyright>Copyright © 2025  Aldrin John O. Manalansan  &lt;aldrinjohnolaermanalansan@gmail.com&gt;</Copyright>
+		<PackageProjectUrl>https://github.com/Aldrin-John-Olaer-Manalansan/H2O_Master</PackageProjectUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/Aldrin-John-Olaer-Manalansan/H2O_Master</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	</PropertyGroup>
+
+	<!-- Debug x86 -->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+		<PlatformTarget>x86</PlatformTarget>
+		<Prefer32Bit>true</Prefer32Bit>
+		<OutputPath>bin\Debug\x86\</OutputPath>
+	</PropertyGroup>
+
+	<!-- Debug x64 -->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+		<Prefer32Bit>false</Prefer32Bit>
+		<OutputPath>bin\Debug\x64\</OutputPath>
+	</PropertyGroup>
+
+	<!-- Release x86 -->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+		<PlatformTarget>x86</PlatformTarget>
+		<Prefer32Bit>true</Prefer32Bit>
+		<OutputPath>bin\Release\x86\</OutputPath>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+		<Optimize>true</Optimize>
+		<DefineConstants></DefineConstants>
+	</PropertyGroup>
+
+	<!-- Release x64 -->
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+		<Prefer32Bit>false</Prefer32Bit>
+		<OutputPath>bin\Release\x64\</OutputPath>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+		<Optimize>true</Optimize>
+		<DefineConstants></DefineConstants>
+	</PropertyGroup>
+
+	<!-- Automatically copy H2O_Master.dll based on platform -->
+	<ItemGroup Condition="'$(Platform)' == 'x64'">
+		<None Include="..\Back-End\build\x64\H2O_Master_Library.dll">
+			<Link>H2O_Master_Library.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Platform)' == 'x86'">
+		<None Include="..\Back-End\build\x86\H2O_Master_Library.dll">
+			<Link>H2O_Master_Library.dll</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>
