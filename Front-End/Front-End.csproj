@@ -67,18 +67,20 @@
 	</PropertyGroup>
 
 	<!-- Automatically copy H2O_Master.dll based on platform -->
-	<ItemGroup Condition="'$(Platform)' == 'x64'">
-		<None Include="..\Back-End\build\x64\H2O_Master_Library.dll">
+	<ItemGroup Condition="'$(Platform)' == 'x64' OR '$(RuntimeIdentifier)' == 'win-x64'">
+		<Content Include="..\Back-End\build\x64\H2O_Master_Library.dll">
 			<Link>H2O_Master_Library.dll</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Platform)' == 'x86'">
-		<None Include="..\Back-End\build\x86\H2O_Master_Library.dll">
+	<ItemGroup Condition="'$(Platform)' == 'x86' OR '$(RuntimeIdentifier)' == 'win-x86'">
+		<Content Include="..\Back-End\build\x86\H2O_Master_Library.dll">
 			<Link>H2O_Master_Library.dll</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
