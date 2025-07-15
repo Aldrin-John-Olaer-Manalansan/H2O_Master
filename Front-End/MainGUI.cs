@@ -84,6 +84,8 @@ namespace H2O_Master {
 			lbl_ArchiveEntryCount.Text = apiInfo.entryCount.ToString();
 
 			archiveEntries_Data.Rows.Clear();
+			bds_ArchiveEntries.Filter = "";
+			tbx_SearchArchiveEntries.Text = ""; // reset filter query
 			unsafe {
 				for (int i = 0; i < apiInfo.entryCount; i++) {
 					H2O_Master_dll.API_Entry* entry = &apiInfo.entries[i];
