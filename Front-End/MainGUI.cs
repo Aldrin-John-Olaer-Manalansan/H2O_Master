@@ -14,6 +14,7 @@
  */
 
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -56,6 +57,10 @@ namespace H2O_Master {
 
 			bds_ArchiveEntries.DataSource = archiveEntries_Data; // link to bindingsource to support query searching later
 			bds_AddedEntries.DataSource = addedEntries_Data; // link to bindingsource to support query searching later
+
+			// hide addedEntriesList by default
+			cbx_ToggleAddedEntriesList.Checked = false;
+			Toggle_AddedEntryListContainer(_, EventArgs.Empty);
 		}
 
 		private void BrowseArchive(object _, EventArgs __) {
@@ -169,6 +174,18 @@ namespace H2O_Master {
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
+			}
+		}
+
+		private void VisitIssuesPage(object _, EventArgs __) {
+			try {
+				Process.Start(new ProcessStartInfo {
+					FileName = "https://github.com/Aldrin-John-Olaer-Manalansan/H2O_Master/issues",
+					UseShellExecute = true
+				});
+			}
+			catch (Exception ex) {
+				MessageBox.Show($"Failed to open browser: {ex.Message}");
 			}
 		}
 

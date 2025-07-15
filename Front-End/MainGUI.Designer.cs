@@ -32,6 +32,7 @@
 			DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
 			DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainGUI));
 			tlp_OuterContainer = new TableLayoutPanel();
 			dgv_ArchiveEntryList = new DataGridView();
 			ArchiveEntry_Index = new DataGridViewTextBoxColumn();
@@ -66,6 +67,7 @@
 			lbl_Version = new Label();
 			btn_SaveAs = new Button();
 			btn_Browse = new Button();
+			btn_Issues = new Button();
 			tbx_LoadedArchive = new TextBox();
 			tableLayoutPanel1 = new TableLayoutPanel();
 			flp_ArchiveTextContainer = new FlowLayoutPanel();
@@ -118,7 +120,7 @@
 			tlp_OuterContainer.RowStyles.Add(new RowStyle());
 			tlp_OuterContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
 			tlp_OuterContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tlp_OuterContainer.Size = new Size(841, 580);
+			tlp_OuterContainer.Size = new Size(984, 580);
 			tlp_OuterContainer.TabIndex = 0;
 			// 
 			// dgv_ArchiveEntryList
@@ -164,7 +166,7 @@
 			dgv_ArchiveEntryList.RowHeadersVisible = false;
 			dgv_ArchiveEntryList.RowHeadersWidth = 51;
 			dgv_ArchiveEntryList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv_ArchiveEntryList.Size = new Size(835, 206);
+			dgv_ArchiveEntryList.Size = new Size(978, 206);
 			dgv_ArchiveEntryList.TabIndex = 1;
 			// 
 			// ArchiveEntry_Index
@@ -304,7 +306,7 @@
 			dgv_AddedEntryList.RowHeadersVisible = false;
 			dgv_AddedEntryList.RowHeadersWidth = 51;
 			dgv_AddedEntryList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-			dgv_AddedEntryList.Size = new Size(835, 206);
+			dgv_AddedEntryList.Size = new Size(978, 206);
 			dgv_AddedEntryList.TabIndex = 1;
 			dgv_AddedEntryList.KeyDown += DGV_AddedEntryList_KeyDown;
 			// 
@@ -360,27 +362,25 @@
 			// 
 			tlp_PropertiesContainer.AutoSize = true;
 			tlp_PropertiesContainer.BackColor = Color.FromArgb(48, 56, 65);
-			tlp_PropertiesContainer.ColumnCount = 9;
+			tlp_PropertiesContainer.ColumnCount = 6;
 			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle());
-			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
 			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle());
-			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle());
 			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
 			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
 			tlp_PropertiesContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-			tlp_PropertiesContainer.Controls.Add(tlp_RawSizeContainer, 8, 0);
-			tlp_PropertiesContainer.Controls.Add(tlp_CompressedSizeContainer, 6, 0);
-			tlp_PropertiesContainer.Controls.Add(tlp_VersionContainer, 4, 0);
-			tlp_PropertiesContainer.Controls.Add(btn_SaveAs, 2, 0);
+			tlp_PropertiesContainer.Controls.Add(tlp_RawSizeContainer, 5, 0);
+			tlp_PropertiesContainer.Controls.Add(tlp_CompressedSizeContainer, 4, 0);
+			tlp_PropertiesContainer.Controls.Add(tlp_VersionContainer, 3, 0);
+			tlp_PropertiesContainer.Controls.Add(btn_SaveAs, 1, 0);
 			tlp_PropertiesContainer.Controls.Add(btn_Browse, 0, 0);
+			tlp_PropertiesContainer.Controls.Add(btn_Issues, 2, 0);
 			tlp_PropertiesContainer.Dock = DockStyle.Fill;
 			tlp_PropertiesContainer.Location = new Point(3, 36);
 			tlp_PropertiesContainer.Name = "tlp_PropertiesContainer";
 			tlp_PropertiesContainer.RowCount = 1;
 			tlp_PropertiesContainer.RowStyles.Add(new RowStyle());
-			tlp_PropertiesContainer.Size = new Size(835, 39);
+			tlp_PropertiesContainer.Size = new Size(978, 39);
 			tlp_PropertiesContainer.TabIndex = 2;
 			// 
 			// tlp_RawSizeContainer
@@ -392,11 +392,12 @@
 			tlp_RawSizeContainer.Controls.Add(lbl_RawSize, 0, 0);
 			tlp_RawSizeContainer.Controls.Add(tbx_RawSize, 1, 0);
 			tlp_RawSizeContainer.Dock = DockStyle.Fill;
-			tlp_RawSizeContainer.Location = new Point(616, 3);
+			tlp_RawSizeContainer.Location = new Point(739, 3);
+			tlp_RawSizeContainer.Margin = new Padding(20, 3, 3, 3);
 			tlp_RawSizeContainer.Name = "tlp_RawSizeContainer";
 			tlp_RawSizeContainer.RowCount = 1;
 			tlp_RawSizeContainer.RowStyles.Add(new RowStyle());
-			tlp_RawSizeContainer.Size = new Size(216, 33);
+			tlp_RawSizeContainer.Size = new Size(236, 33);
 			tlp_RawSizeContainer.TabIndex = 6;
 			// 
 			// lbl_RawSize
@@ -420,7 +421,7 @@
 			tbx_RawSize.Margin = new Padding(3, 7, 3, 3);
 			tbx_RawSize.Name = "tbx_RawSize";
 			tbx_RawSize.ReadOnly = true;
-			tbx_RawSize.Size = new Size(133, 20);
+			tbx_RawSize.Size = new Size(153, 20);
 			tbx_RawSize.TabIndex = 6;
 			tbx_RawSize.Text = "0";
 			tbx_RawSize.WordWrap = false;
@@ -434,11 +435,12 @@
 			tlp_CompressedSizeContainer.Controls.Add(tbx_CompressedSize, 1, 0);
 			tlp_CompressedSizeContainer.Controls.Add(lbl_CompressedSize, 0, 0);
 			tlp_CompressedSizeContainer.Dock = DockStyle.Fill;
-			tlp_CompressedSizeContainer.Location = new Point(374, 3);
+			tlp_CompressedSizeContainer.Location = new Point(482, 3);
+			tlp_CompressedSizeContainer.Margin = new Padding(20, 3, 3, 3);
 			tlp_CompressedSizeContainer.Name = "tlp_CompressedSizeContainer";
 			tlp_CompressedSizeContainer.RowCount = 1;
 			tlp_CompressedSizeContainer.RowStyles.Add(new RowStyle());
-			tlp_CompressedSizeContainer.Size = new Size(216, 33);
+			tlp_CompressedSizeContainer.Size = new Size(234, 33);
 			tlp_CompressedSizeContainer.TabIndex = 5;
 			// 
 			// tbx_CompressedSize
@@ -451,7 +453,7 @@
 			tbx_CompressedSize.Margin = new Padding(3, 7, 3, 3);
 			tbx_CompressedSize.Name = "tbx_CompressedSize";
 			tbx_CompressedSize.ReadOnly = true;
-			tbx_CompressedSize.Size = new Size(79, 20);
+			tbx_CompressedSize.Size = new Size(97, 20);
 			tbx_CompressedSize.TabIndex = 6;
 			tbx_CompressedSize.Text = "0";
 			tbx_CompressedSize.WordWrap = false;
@@ -476,7 +478,8 @@
 			tlp_VersionContainer.Controls.Add(tbx_Version, 1, 0);
 			tlp_VersionContainer.Controls.Add(lbl_Version, 0, 0);
 			tlp_VersionContainer.Dock = DockStyle.Fill;
-			tlp_VersionContainer.Location = new Point(243, 3);
+			tlp_VersionContainer.Location = new Point(354, 3);
+			tlp_VersionContainer.Margin = new Padding(20, 3, 3, 3);
 			tlp_VersionContainer.Name = "tlp_VersionContainer";
 			tlp_VersionContainer.RowCount = 1;
 			tlp_VersionContainer.RowStyles.Add(new RowStyle());
@@ -510,19 +513,21 @@
 			// btn_SaveAs
 			// 
 			btn_SaveAs.Anchor = AnchorStyles.Top;
+			btn_SaveAs.BackColor = Color.LightGreen;
 			btn_SaveAs.ForeColor = Color.Black;
-			btn_SaveAs.Location = new Point(123, 3);
+			btn_SaveAs.Location = new Point(120, 3);
+			btn_SaveAs.Margin = new Padding(20, 3, 3, 3);
 			btn_SaveAs.Name = "btn_SaveAs";
 			btn_SaveAs.Size = new Size(94, 29);
 			btn_SaveAs.TabIndex = 1;
 			btn_SaveAs.Text = "Save As";
-			btn_SaveAs.UseVisualStyleBackColor = true;
+			btn_SaveAs.UseVisualStyleBackColor = false;
 			btn_SaveAs.Click += SaveAs;
 			// 
 			// btn_Browse
 			// 
 			btn_Browse.Anchor = AnchorStyles.Top;
-			btn_Browse.BackColor = Color.White;
+			btn_Browse.BackColor = Color.Gold;
 			btn_Browse.ForeColor = Color.Black;
 			btn_Browse.Location = new Point(3, 3);
 			btn_Browse.Name = "btn_Browse";
@@ -532,6 +537,19 @@
 			btn_Browse.UseVisualStyleBackColor = false;
 			btn_Browse.Click += BrowseArchive;
 			// 
+			// btn_Issues
+			// 
+			btn_Issues.BackColor = Color.Crimson;
+			btn_Issues.ForeColor = Color.Black;
+			btn_Issues.Location = new Point(237, 3);
+			btn_Issues.Margin = new Padding(20, 3, 3, 3);
+			btn_Issues.Name = "btn_Issues";
+			btn_Issues.Size = new Size(94, 29);
+			btn_Issues.TabIndex = 7;
+			btn_Issues.Text = "Issues";
+			btn_Issues.UseVisualStyleBackColor = false;
+			btn_Issues.Click += VisitIssuesPage;
+			// 
 			// tbx_LoadedArchive
 			// 
 			tbx_LoadedArchive.BackColor = Color.FromArgb(48, 56, 65);
@@ -540,7 +558,7 @@
 			tbx_LoadedArchive.Location = new Point(3, 3);
 			tbx_LoadedArchive.Name = "tbx_LoadedArchive";
 			tbx_LoadedArchive.ReadOnly = true;
-			tbx_LoadedArchive.Size = new Size(835, 27);
+			tbx_LoadedArchive.Size = new Size(978, 27);
 			tbx_LoadedArchive.TabIndex = 4;
 			tbx_LoadedArchive.WordWrap = false;
 			// 
@@ -557,11 +575,12 @@
 			tableLayoutPanel1.Name = "tableLayoutPanel1";
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
-			tableLayoutPanel1.Size = new Size(835, 33);
+			tableLayoutPanel1.Size = new Size(978, 33);
 			tableLayoutPanel1.TabIndex = 5;
 			// 
 			// flp_ArchiveTextContainer
 			// 
+			flp_ArchiveTextContainer.AutoSize = true;
 			flp_ArchiveTextContainer.Controls.Add(cbx_ToggleArchiveEntriesList);
 			flp_ArchiveTextContainer.Controls.Add(lbl_ArchiveEntryCount);
 			flp_ArchiveTextContainer.Controls.Add(lbl_ArchiveEntriesText);
@@ -569,10 +588,10 @@
 			flp_ArchiveTextContainer.Name = "flp_ArchiveTextContainer";
 			flp_ArchiveTextContainer.Size = new Size(159, 23);
 			flp_ArchiveTextContainer.TabIndex = 0;
+			flp_ArchiveTextContainer.WrapContents = false;
 			// 
 			// cbx_ToggleArchiveEntriesList
 			// 
-			cbx_ToggleArchiveEntriesList.AutoSize = true;
 			cbx_ToggleArchiveEntriesList.Checked = true;
 			cbx_ToggleArchiveEntriesList.CheckState = CheckState.Checked;
 			cbx_ToggleArchiveEntriesList.Location = new Point(3, 3);
@@ -593,7 +612,6 @@
 			// 
 			// lbl_ArchiveEntriesText
 			// 
-			lbl_ArchiveEntriesText.AutoSize = true;
 			lbl_ArchiveEntriesText.Location = new Point(50, 0);
 			lbl_ArchiveEntriesText.Name = "lbl_ArchiveEntriesText";
 			lbl_ArchiveEntriesText.Size = new Size(106, 20);
@@ -607,7 +625,7 @@
 			tbx_SearchArchiveEntries.ForeColor = Color.White;
 			tbx_SearchArchiveEntries.Location = new Point(168, 3);
 			tbx_SearchArchiveEntries.Name = "tbx_SearchArchiveEntries";
-			tbx_SearchArchiveEntries.Size = new Size(664, 27);
+			tbx_SearchArchiveEntries.Size = new Size(807, 27);
 			tbx_SearchArchiveEntries.TabIndex = 1;
 			tbx_SearchArchiveEntries.WordWrap = false;
 			tbx_SearchArchiveEntries.KeyDown += TBX_SearchArchiveEntries_KeyDown;
@@ -625,7 +643,7 @@
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
 			tableLayoutPanel2.RowCount = 1;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.Size = new Size(835, 33);
+			tableLayoutPanel2.Size = new Size(978, 33);
 			tableLayoutPanel2.TabIndex = 6;
 			// 
 			// tbx_SearchAddedEntries
@@ -635,12 +653,13 @@
 			tbx_SearchAddedEntries.ForeColor = Color.White;
 			tbx_SearchAddedEntries.Location = new Point(164, 3);
 			tbx_SearchAddedEntries.Name = "tbx_SearchAddedEntries";
-			tbx_SearchAddedEntries.Size = new Size(668, 27);
+			tbx_SearchAddedEntries.Size = new Size(811, 27);
 			tbx_SearchAddedEntries.TabIndex = 2;
 			tbx_SearchAddedEntries.WordWrap = false;
 			// 
 			// flp_AddedEntriesTextContainer
 			// 
+			flp_AddedEntriesTextContainer.AutoSize = true;
 			flp_AddedEntriesTextContainer.Controls.Add(cbx_ToggleAddedEntriesList);
 			flp_AddedEntriesTextContainer.Controls.Add(lbl_AddedEntryCount);
 			flp_AddedEntriesTextContainer.Controls.Add(lbl_AddedEntriesText);
@@ -648,10 +667,10 @@
 			flp_AddedEntriesTextContainer.Name = "flp_AddedEntriesTextContainer";
 			flp_AddedEntriesTextContainer.Size = new Size(155, 23);
 			flp_AddedEntriesTextContainer.TabIndex = 0;
+			flp_AddedEntriesTextContainer.WrapContents = false;
 			// 
 			// cbx_ToggleAddedEntriesList
 			// 
-			cbx_ToggleAddedEntriesList.AutoSize = true;
 			cbx_ToggleAddedEntriesList.Checked = true;
 			cbx_ToggleAddedEntriesList.CheckState = CheckState.Checked;
 			cbx_ToggleAddedEntriesList.Location = new Point(3, 3);
@@ -672,7 +691,6 @@
 			// 
 			// lbl_AddedEntriesText
 			// 
-			lbl_AddedEntriesText.AutoSize = true;
 			lbl_AddedEntriesText.Location = new Point(50, 0);
 			lbl_AddedEntriesText.Name = "lbl_AddedEntriesText";
 			lbl_AddedEntriesText.Size = new Size(102, 20);
@@ -689,11 +707,13 @@
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackColor = Color.FromArgb(31, 31, 31);
-			ClientSize = new Size(841, 580);
+			ClientSize = new Size(984, 580);
 			Controls.Add(tlp_OuterContainer);
 			ForeColor = Color.White;
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "MainGUI";
-			Text = "AJOM's H2O Master beta v0.0.0";
+			Text = "AJOM's H2O Master beta v0.1.0";
+			WindowState = FormWindowState.Maximized;
 			Load += GUI_Load;
 			tlp_OuterContainer.ResumeLayout(false);
 			tlp_OuterContainer.PerformLayout();
@@ -771,5 +791,6 @@
 		private DataGridViewTextBoxColumn ArchiveEntry_RawSize;
 		private DataGridViewTextBoxColumn ArchiveEntry_Checksum;
 		private DataGridViewTextBoxColumn ArchiveEntry_HasHeader;
+		private Button btn_Issues;
 	}
 }

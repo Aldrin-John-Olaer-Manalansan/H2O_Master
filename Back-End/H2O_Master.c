@@ -230,6 +230,11 @@ DLL_PUBLIC t_api_info Load(const char* const filePath) {
 			memcpy(&index, &apiEntry->directory, sizeof(index)); // recover the directoryNode index from the temporary storage
 			apiEntry->directory = (index < directoryNodeCount) ? ((t_directorynode*)g_Directories.data)[index].name : NULL;
 		}
+	} else { // since there are no folderNames, there are no directoryNodes
+		// we set the directory of all entries into NULL
+		for (t_api_entry* apiEntry = g_APIInfo.entries; apiEntry < g_APIInfo.entries + header_Archive.fileCount; apiEntry++) {
+			apiEntry->directory = NULL;
+		}
 	}
 
 	// map the filenames to the entries
@@ -256,6 +261,10 @@ DLL_PUBLIC t_api_info Load(const char* const filePath) {
 		for (t_api_entry* apiEntry = g_APIInfo.entries; apiEntry < g_APIInfo.entries + header_Archive.fileCount; apiEntry++) {
 			memcpy(&index, &apiEntry->name, sizeof(index)); // recover the filename index from the temporary storage
 			apiEntry->name = (index < chunkData_FileNames->count) ? char16Map[index] : NULL; // link the filename
+		}
+	} else { // since there are no fileNames, we set the name of all entries into NULL
+		for (t_api_entry* apiEntry = g_APIInfo.entries; apiEntry < g_APIInfo.entries + header_Archive.fileCount; apiEntry++) {
+			apiEntry->name = NULL;
 		}
 	}
 
